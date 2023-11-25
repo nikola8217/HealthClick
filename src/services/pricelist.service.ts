@@ -2,6 +2,7 @@ import { Request } from "express";
 import { CreateOrUpdatePricelist } from "../interfaces/pricelist.interface";
 import { PricelistRepository } from "../repositories/pricelist.repository";
 import { BadRequestError } from "../errors/bad-request-error";
+import { isValidObjectId } from "mongoose";
 
 export class PricelistService {
     static async createPricelist(req: Request) {
@@ -22,21 +23,13 @@ export class PricelistService {
     }
 
     static async findPricelistByID(req: Request) {
-        const pricelist = await PricelistRepository.getPricelistById(req.params.id);
-
-        if (!pricelist) {
-            throw new BadRequestError('Pricelist does not exist');
-        }
+        const pricelist = this.checkPricelist(req.params.id);
 
         return pricelist;
     }
 
     static async updatePricelist(req: Request) {
-        const pricelistExists = await PricelistRepository.getPricelistById(req.params.id);
-
-        if (!pricelistExists) {
-            throw new BadRequestError('Pricelist does not exist');
-        }
+        this.checkPricelist(req.params.id);
 
         const nameTaken = await PricelistRepository.findOtherByName(req.params.id, req.body.name);
 
@@ -55,12 +48,22 @@ export class PricelistService {
     }
 
     static async deletePricelist(req: Request) {
-        const pricelistExists = await PricelistRepository.getPricelistById(req.params.id);
+        this.checkPricelist(req.params.id);
+
+        await PricelistRepository.deletePricelist(req.params.id);
+    }
+
+    private static async checkPricelist(pricelist: string) {
+        if (!isValidObjectId(pricelist)) {
+            throw new BadRequestError('Pricelist does not exist')
+        }
+
+        const pricelistExists = await PricelistRepository.getPricelistById(pricelist);
 
         if (!pricelistExists) {
             throw new BadRequestError('Pricelist does not exist');
         }
 
-        await PricelistRepository.deletePricelist(req.params.id);
+        return pricelistExists;
     }
 }

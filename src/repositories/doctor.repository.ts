@@ -10,7 +10,7 @@ export class DoctorRepository {
         return await Doctor.find({});
     }
 
-    static async findDoctorById (id: string) {
+    static async getDoctorById (id: string) {
         return await Doctor.findById(id);
     }
 

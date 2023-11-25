@@ -3,14 +3,11 @@ import { CreateOrUpdateDoctor } from "../interfaces/doctor.interface";
 import { DoctorRepository } from "../repositories/doctor.repository";
 import { SpecializationRepository } from "../repositories/specialization.repository";
 import { BadRequestError } from "../errors/bad-request-error";
+import { isValidObjectId } from "mongoose";
 
 export class DoctorService {
     static async createDoctor(req: Request) {
-        const specializationExists = await SpecializationRepository.findById(req.body.specialization);
-
-        if (!specializationExists) {
-            throw new BadRequestError('Specialization does not exist');
-        }
+        this.checkSpecialization(req.body.specialization);
 
         const doctorData: CreateOrUpdateDoctor = {
             name: req.body.name,
@@ -26,26 +23,16 @@ export class DoctorService {
     }
 
     static async findDoctorByID(req: Request) {
-        const doctor = await DoctorRepository.findDoctorById(req.params.id);
-
-        if (!doctor) {
-            throw new BadRequestError('Doctor does not exist');
-        }
+        const doctor = this.checkDoctor(req.params.id);
 
         return doctor;
     }
 
     static async updateDoctor(req: Request) {
-        const doctorExists = await DoctorRepository.findDoctorById(req.params.id);
+        this.checkDoctor(req.params.id);
 
-        if (!doctorExists) {
-            throw new BadRequestError('Doctor does not exist');
-        }
-
-        const specializationExists = await SpecializationRepository.findById(req.body.specialization);
-
-        if (!specializationExists) {
-            throw new BadRequestError('Specialization does not exist');
+        if (req.body.specialization) {
+            this.checkSpecialization(req.body.specialization);
         }
 
         const doctorData: CreateOrUpdateDoctor = {
@@ -62,12 +49,36 @@ export class DoctorService {
     }
 
     static async deleteDoctor(req: Request) {
-        const doctorExists = await DoctorRepository.findDoctorById(req.params.id);
+        this.checkDoctor(req.params.id);
+
+        await DoctorRepository.deleteDoctor(req.params.id);
+    }
+
+    private static async checkSpecialization(specialization: string) {
+        if (!isValidObjectId(specialization)) {
+            throw new BadRequestError('Specialization does not exist')
+        }
+
+        const specializationExists = await SpecializationRepository.getSpecializationById(specialization);
+
+        if (!specializationExists) {
+            throw new BadRequestError('Specialization does not exist');
+        }
+
+        return specializationExists;
+    }
+
+    private static async checkDoctor(doctor: string) {
+        if (!isValidObjectId(doctor)) {
+            throw new BadRequestError('Doctor does not exist')
+        }
+
+        const doctorExists = await DoctorRepository.getDoctorById(doctor);
 
         if (!doctorExists) {
             throw new BadRequestError('Doctor does not exist');
         }
 
-        await DoctorRepository.deleteDoctor(req.params.id);
+        return doctorExists;
     }
 }

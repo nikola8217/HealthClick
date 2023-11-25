@@ -14,7 +14,7 @@ export class SpecializationRepository {
         return await Specialization.find({});
     }
 
-    static async findById(id: string) {
+    static async getSpecializationById(id: string) {
         return await Specialization.findById(id);
     }
 
