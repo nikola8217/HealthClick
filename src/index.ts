@@ -6,6 +6,7 @@ import { specializationRouter } from './routes/specialization.routes';
 import { doctorRouter } from './routes/doctor.routes';
 import { patientRouter } from './routes/patient.routes';
 import { pricelistRouter } from './routes/pricelist.routes';
+import { appointmentRouter } from './routes/appointment.routes';
 import { errorHandler } from './middlewares/error-handler';
 import cookieSession from 'cookie-session';
 
@@ -24,6 +25,7 @@ app.use('/api/v1/specializations', specializationRouter);
 app.use('/api/v1/doctors', doctorRouter);
 app.use('/api/v1/patients', patientRouter);
 app.use('/api/v1/pricelists', pricelistRouter);
+app.use('/api/v1/appointments', appointmentRouter);
 
 app.use(errorHandler);
 

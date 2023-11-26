@@ -35,13 +35,14 @@ export class DoctorService {
             this.checkSpecialization(req.body.specialization);
         }
 
-        const doctorData: CreateOrUpdateDoctor = {
-            name: req.body.name,
-            education: req.body.education,
-            yearsOfExpirience: req.body.yearsOfExpirience,
-            yearOfEmployment: req.body.yearOfEmployment,
-            specialization: req.body.specialization
-        };
+        const allowedFields = ['name', 'education', 'yearsOfExpirience', 'yearOfEmployment', 'specialization'];
+        const doctorData: CreateOrUpdateDoctor = {};
+
+        for (const field of allowedFields) {
+            if (req.body[field]) {
+                doctorData[field] = req.body[field];
+            }
+        }
 
         const doctor = await DoctorRepository.updateDoctor(req.params.id, doctorData);
 

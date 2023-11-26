@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-interface Term extends mongoose.Document {
+interface Appointment extends mongoose.Document {
     patient: string,
     doctor: string,
     pricelistItem: string,
@@ -8,7 +8,7 @@ interface Term extends mongoose.Document {
     status: string
 };
 
-const termSchema = new mongoose.Schema({
+const appointmentSchema = new mongoose.Schema({
     patient: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
@@ -24,10 +24,6 @@ const termSchema = new mongoose.Schema({
         required: true,
         ref: 'Pricelist'
     },
-    dateOfBirth: {
-        type: Date,
-        required: true
-    },
     time: {
         type: Date,
         required: true
@@ -39,7 +35,7 @@ const termSchema = new mongoose.Schema({
     }
 });
 
-const Term = mongoose.model<Term>('Term', termSchema);
+const Appointment = mongoose.model<Appointment>('Appointment', appointmentSchema);
 
-export { Term };
+export { Appointment };
 

@@ -2,7 +2,7 @@ import { CreateOrUpdatePricelist } from "../interfaces/pricelist.interface";
 import { Pricelist } from "../models/pricelist.model";
 
 export class PricelistRepository {
-    static async createPricelist(pricelist: CreateOrUpdatePricelist) {
+    static async createPricelistItem(pricelist: CreateOrUpdatePricelist) {
         return await Pricelist.create(pricelist);
     }
 
@@ -10,19 +10,19 @@ export class PricelistRepository {
         return await Pricelist.findOne({ name });
     }
 
-    static async getAllPricelists() {
+    static async getAllPricelistItems() {
         return await Pricelist.find({});
     }
 
-    static async getPricelistById(id: string) {
+    static async getPricelistItemById(id: string) {
         return await Pricelist.findById(id);
     }
 
-    static async updatePricelist(id: string, pricelist: CreateOrUpdatePricelist) {
+    static async updatePricelistItem(id: string, pricelist: CreateOrUpdatePricelist) {
         return await Pricelist.findByIdAndUpdate(id, pricelist, { new: true });
     }
 
-    static async deletePricelist(id: string) {
+    static async deletePricelistItem(id: string) {
         return await Pricelist.findByIdAndDelete(id);
     }
 

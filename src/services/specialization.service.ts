@@ -1,7 +1,7 @@
 import { Request } from "express";
 import { SpecializationRepository } from '../repositories/specialization.repository';
 import { BadRequestError } from "../errors/bad-request-error";
-import { CreateSpecialization } from "../interfaces/specialization.interface";
+import { CreateOrUpdateSpecialization } from "../interfaces/specialization.interface";
 import { isValidObjectId } from "mongoose";
 
 export class SpecializationService {
@@ -12,7 +12,7 @@ export class SpecializationService {
             throw new BadRequestError('Specialization already exists');
         }
 
-        const specializationData: CreateSpecialization = {
+        const specializationData: CreateOrUpdateSpecialization = {
             name: req.body.name
         };
 
@@ -36,9 +36,14 @@ export class SpecializationService {
             throw new BadRequestError('Specialization already exists');
         }
 
-        const specializationData: CreateSpecialization = {
-            name: req.body.name
-        };
+        const allowedFields = ['name'];
+        const specializationData: CreateOrUpdateSpecialization = {};
+
+        for (const field of allowedFields) {
+            if (req.body[field]) {
+                specializationData[field] = req.body[field];
+            }
+        }
 
         const specialization = await SpecializationRepository.updateSpecialization(req.params.id, specializationData);
 

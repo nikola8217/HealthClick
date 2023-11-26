@@ -1,3 +1,4 @@
-export interface CreateSpecialization {
-    name: string
+export interface CreateOrUpdateSpecialization {
+    [key: string]: string | undefined;
+    name?: string
 };

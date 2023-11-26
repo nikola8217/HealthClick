@@ -2,7 +2,7 @@ import { body } from 'express-validator';
 import moment from 'moment';
 import { BadRequestError } from '../errors/bad-request-error';
 
-export const createAndUpdatePatientRules = [
+export const createPatientRules = [
     body('name').notEmpty().withMessage('Name is required'),
     body('address').notEmpty().withMessage('Address is required'),
     body('dateOfBirth')

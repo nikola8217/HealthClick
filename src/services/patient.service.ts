@@ -26,11 +26,14 @@ export class PatientService {
     static async updatePatient(req: Request) {
         this.checkPatient(req.params.id);
 
-        const patientData: CreateOrUpdatePatient = {
-            name: req.body.name,
-            address: req.body.address,
-            dateOfBirth: req.body.dateOfBirth
-        };
+        const allowedFields = ['name', 'address', 'dateOfBirth'];
+        const patientData: CreateOrUpdatePatient = {};
+
+        for (const field of allowedFields) {
+            if (req.body[field]) {
+                patientData[field] = req.body[field];
+            }
+        }
 
         const patient = await PatientRepository.updatePatient(req.params.id, patientData);
 

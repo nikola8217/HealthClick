@@ -3,9 +3,9 @@ import { PricelistService } from "../services/pricelist.service";
 import { PricelistRepository } from "../repositories/pricelist.repository";
 
 export class PricelistController {
-    static async create(req: Request, res: Response, next: NextFunction) {
+    static async createPricelistItem(req: Request, res: Response, next: NextFunction) {
         try {
-            const pricelist = await PricelistService.createPricelist(req);
+            const pricelist = await PricelistService.createPricelistItem(req);
 
             res.status(201).json(pricelist);
         } catch (error) {
@@ -13,15 +13,15 @@ export class PricelistController {
         }
     }
 
-    static async getAll(req: Request, res: Response) {
-        const pricelists = await PricelistRepository.getAllPricelists();
+    static async getPricelistItems(req: Request, res: Response) {
+        const pricelists = await PricelistRepository.getAllPricelistItems();
 
         res.status(200).json(pricelists);
     }
 
-    static async getSingle(req: Request, res: Response, next: NextFunction) {
+    static async getSinglePricelistItem(req: Request, res: Response, next: NextFunction) {
         try {
-            const pricelist = await PricelistService.findPricelistByID(req);
+            const pricelist = await PricelistService.findPricelistItemByID(req);
 
             res.status(200).json(pricelist);
         } catch (error) {
@@ -29,9 +29,9 @@ export class PricelistController {
         }
     }
 
-    static async update(req: Request, res: Response, next: NextFunction) {
+    static async updatePricelistItem(req: Request, res: Response, next: NextFunction) {
         try {
-            const pricelist = await PricelistService.updatePricelist(req);
+            const pricelist = await PricelistService.updatePricelistItem(req);
 
             res.status(200).json(pricelist);
         } catch (error) {
@@ -39,9 +39,9 @@ export class PricelistController {
         }
     }
 
-    static async delete(req: Request, res: Response, next: NextFunction) {
+    static async deletePricelistItem(req: Request, res: Response, next: NextFunction) {
         try {
-            await PricelistService.deletePricelist(req);
+            await PricelistService.deletePricelistItem(req);
 
             res.status(200).json({ message: 'Pricelist is deleted' });
         } catch (error) {

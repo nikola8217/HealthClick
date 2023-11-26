@@ -1,4 +1,5 @@
 export interface CreateOrUpdatePricelist {
-    name: string,
-    price: number
+    [key: string]: string | number | undefined;
+    name?: string,
+    price?: number
 };

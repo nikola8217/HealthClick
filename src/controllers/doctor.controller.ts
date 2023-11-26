@@ -3,7 +3,7 @@ import { DoctorService } from "../services/doctor.service";
 import { DoctorRepository } from "../repositories/doctor.repository";
 
 export class DoctorController {
-    static async create(req: Request, res: Response, next: NextFunction) {
+    static async createDoctor(req: Request, res: Response, next: NextFunction) {
         try {
             const doctor = await DoctorService.createDoctor(req);
 
@@ -13,13 +13,13 @@ export class DoctorController {
         }
     }
 
-    static async getAll(req: Request, res: Response) {
+    static async getDoctors(req: Request, res: Response) {
         const doctors = await DoctorRepository.getAllDoctors();
 
         res.status(200).json(doctors);
     }
 
-    static async getSingle(req: Request, res: Response, next: NextFunction) {
+    static async getSingleDoctor(req: Request, res: Response, next: NextFunction) {
         try {
             const doctor = await DoctorService.findDoctorByID(req);
 
@@ -29,7 +29,7 @@ export class DoctorController {
         }
     }
 
-    static async update(req: Request, res: Response, next: NextFunction) {
+    static async updateDoctor(req: Request, res: Response, next: NextFunction) {
         try {
             const doctor = await DoctorService.updateDoctor(req);
 
@@ -39,7 +39,7 @@ export class DoctorController {
         }
     }
 
-    static async delete(req: Request, res: Response, next: NextFunction) {
+    static async deleteDoctor(req: Request, res: Response, next: NextFunction) {
         try {
             await DoctorService.deleteDoctor(req);
 

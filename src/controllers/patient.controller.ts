@@ -3,7 +3,7 @@ import { PatientService } from "../services/patient.service";
 import { PatientRepository } from "../repositories/patient.repository";
 
 export class PatientController {
-    static async create(req: Request, res: Response, next: NextFunction) {
+    static async createPatient(req: Request, res: Response, next: NextFunction) {
         try {
             const patient = await PatientService.createPatient(req);
 
@@ -13,13 +13,17 @@ export class PatientController {
         }
     }
 
-    static async getAll(req: Request, res: Response) {
-        const patients = await PatientRepository.getAllPatients();
+    static async getPatients(req: Request, res: Response, next: NextFunction) {
+        try {
+            const patient = PatientService.findPatientByID(req);
 
-        res.status(200).json(patients);
+            res.status(200).json(patient);
+        } catch (error) {
+            next(error);
+        }
     }
 
-    static async getSingle(req: Request, res: Response, next: NextFunction) {
+    static async getSinglePatient(req: Request, res: Response, next: NextFunction) {
         try {
             const patient = await PatientService.findPatientByID(req);
 
@@ -29,7 +33,7 @@ export class PatientController {
         }
     }
 
-    static async update(req: Request, res: Response, next: NextFunction) {
+    static async updatePatient(req: Request, res: Response, next: NextFunction) {
         try {
             const patient = await PatientService.updatePatient(req);
 
@@ -39,7 +43,7 @@ export class PatientController {
         }
     }
 
-    static async delete(req: Request, res: Response, next: NextFunction) {
+    static async deletePatient(req: Request, res: Response, next: NextFunction) {
         try {
             await PatientService.deletePatient(req);
 

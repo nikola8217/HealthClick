@@ -1,6 +1,6 @@
 import { body } from 'express-validator';
 
-export const createAndUpdateDoctorRules = [
+export const createDoctorRules = [
     body('name').notEmpty().withMessage('Name is required'),
     body('education').notEmpty().withMessage('Education is required'),
     body('yearsOfExpirience').isNumeric().withMessage('Years of experience must be a numeric value'),

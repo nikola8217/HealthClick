@@ -3,7 +3,7 @@ import { SpecializationService } from "../services/specialization.service";
 import { SpecializationRepository } from "../repositories/specialization.repository";
 
 export class SpecializationController {
-    static async create(req: Request, res: Response, next: NextFunction) {
+    static async createSpecialization(req: Request, res: Response, next: NextFunction) {
         try {
             const specialization = await SpecializationService.createSpecialization(req);
 
@@ -13,13 +13,13 @@ export class SpecializationController {
         }
     }
 
-    static async getAll(req: Request, res: Response) {
+    static async getSpecializations(req: Request, res: Response) {
         const specializations = await SpecializationRepository.getAllSpecialization();
 
         res.status(200).json(specializations);
     }
 
-    static async getSingle(req: Request, res: Response, next: NextFunction) {
+    static async getSingleSpecialization(req: Request, res: Response, next: NextFunction) {
         try {
             const doctor = await SpecializationService.findSpecializationByID(req);
 
@@ -29,7 +29,7 @@ export class SpecializationController {
         }
     }
 
-    static async update(req: Request, res: Response, next: NextFunction) {
+    static async updateSpecialization(req: Request, res: Response, next: NextFunction) {
         try {
             const specialization = await SpecializationService.updateSpecialization(req);
 
@@ -39,7 +39,7 @@ export class SpecializationController {
         }
     }
 
-    static async delete(req: Request, res: Response, next: NextFunction) {
+    static async deleteSpecialization(req: Request, res: Response, next: NextFunction) {
         try {
             await SpecializationService.deleteSpecialization(req);
             

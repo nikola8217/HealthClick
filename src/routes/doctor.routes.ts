@@ -1,5 +1,5 @@
 import express from 'express';
-import { createAndUpdateDoctorRules } from '../validation/doctor.validation';
+import { createDoctorRules } from '../validation/doctor.validation';
 import { validateRequest } from '../middlewares/validate-request';
 import { requireAuth } from '../middlewares/require-auth';
 import { DoctorController } from '../controllers/doctor.controller';
@@ -7,12 +7,12 @@ import { DoctorController } from '../controllers/doctor.controller';
 const router = express.Router();
 
 router.route('/')
-    .post(requireAuth, createAndUpdateDoctorRules, validateRequest, DoctorController.create)
-    .get(requireAuth, DoctorController.getAll);
+    .post(requireAuth, createDoctorRules, validateRequest, DoctorController.createDoctor)
+    .get(requireAuth, DoctorController.getDoctors);
 router.route('/:id')
-    .get(requireAuth, DoctorController.getSingle)
-    .put(requireAuth, createAndUpdateDoctorRules, validateRequest, DoctorController.update)
-    .delete(requireAuth, DoctorController.delete);
+    .get(requireAuth, DoctorController.getSingleDoctor)
+    .put(requireAuth, DoctorController.updateDoctor)
+    .delete(requireAuth, DoctorController.deleteDoctor);
 
 const doctorRouter = router;
 

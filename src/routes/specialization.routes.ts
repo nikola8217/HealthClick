@@ -7,12 +7,12 @@ import { requireAuth } from '../middlewares/require-auth';
 const router = express.Router();
 
 router.route('/')
-    .post(requireAuth, createSpecializationRules, validateRequest, SpecializationController.create)
-    .get(requireAuth, SpecializationController.getAll);
+    .post(requireAuth, createSpecializationRules, validateRequest, SpecializationController.createSpecialization)
+    .get(requireAuth, SpecializationController.getSpecializations);
 router.route('/:id')
-    .get(requireAuth, SpecializationController.getSingle)
-    .put(requireAuth, createSpecializationRules, validateRequest, SpecializationController.update)
-    .delete(requireAuth, SpecializationController.delete);
+    .get(requireAuth, SpecializationController.getSingleSpecialization)
+    .put(requireAuth, SpecializationController.updateSpecialization)
+    .delete(requireAuth, SpecializationController.deleteSpecialization);
 
 const specializationRouter = router;
 
