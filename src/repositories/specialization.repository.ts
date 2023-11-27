@@ -1,8 +1,8 @@
 import { Specialization } from "../models/specialization.model";
-import { CreateSpecialization } from "../interfaces/specialization.interface";
+import { CreateOrUpdateSpecialization } from "../interfaces/specialization.interface";
 
 export class SpecializationRepository {
-    static async createSpecialization(specialization: CreateSpecialization) {
+    static async createSpecialization(specialization: CreateOrUpdateSpecialization) {
         return await Specialization.create(specialization);
     }
 
@@ -18,7 +18,7 @@ export class SpecializationRepository {
         return await Specialization.findById(id);
     }
 
-    static async updateSpecialization(id: string, specialization: CreateSpecialization) {
+    static async updateSpecialization(id: string, specialization: CreateOrUpdateSpecialization) {
         return await Specialization.findByIdAndUpdate(id, specialization, { new: true });
     }
 

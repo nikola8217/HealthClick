@@ -22,13 +22,13 @@ export class SpecializationService {
     }
 
     static async findSpecializationByID(req: Request) {
-        const specialization = this.checkSpecialization(req.params.id);
+        const specialization = await this.checkSpecialization(req.params.id);
 
         return specialization;
     }
 
     static async updateSpecialization(req: Request) {
-        this.checkSpecialization(req.params.id);
+        await this.checkSpecialization(req.params.id);
 
         const nameTaken = await SpecializationRepository.findOtherByName(req.params.id, req.body.name);
 
@@ -51,17 +51,17 @@ export class SpecializationService {
     }
 
     static async deleteSpecialization(req: Request) {
-        this.checkSpecialization(req.params.id);
+        await this.checkSpecialization(req.params.id);
 
         await SpecializationRepository.deleteSpecialization(req.params.id);
     }
 
-    private static async checkSpecialization(pricelist: string) {
-        if (!isValidObjectId(pricelist)) {
+    private static async checkSpecialization(specialization: string) {
+        if (!isValidObjectId(specialization)) {
             throw new BadRequestError('Specialization does not exist')
         }
 
-        const specializationExists = await SpecializationRepository.getSpecializationById(pricelist);
+        const specializationExists = await SpecializationRepository.getSpecializationById(specialization);
 
         if (!specializationExists) {
             throw new BadRequestError('Specialization does not exist');

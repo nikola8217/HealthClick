@@ -7,7 +7,7 @@ import { isValidObjectId } from "mongoose";
 
 export class DoctorService {
     static async createDoctor(req: Request) {
-        this.checkSpecialization(req.body.specialization);
+        await this.checkSpecialization(req.body.specialization);
 
         const doctorData: CreateOrUpdateDoctor = {
             name: req.body.name,
@@ -23,16 +23,16 @@ export class DoctorService {
     }
 
     static async findDoctorByID(req: Request) {
-        const doctor = this.checkDoctor(req.params.id);
+        const doctor = await this.checkDoctor(req.params.id);
 
         return doctor;
     }
 
     static async updateDoctor(req: Request) {
-        this.checkDoctor(req.params.id);
+        await this.checkDoctor(req.params.id);
 
         if (req.body.specialization) {
-            this.checkSpecialization(req.body.specialization);
+            await this.checkSpecialization(req.body.specialization);
         }
 
         const allowedFields = ['name', 'education', 'yearsOfExpirience', 'yearOfEmployment', 'specialization'];
@@ -50,7 +50,7 @@ export class DoctorService {
     }
 
     static async deleteDoctor(req: Request) {
-        this.checkDoctor(req.params.id);
+        await this.checkDoctor(req.params.id);
 
         await DoctorRepository.deleteDoctor(req.params.id);
     }

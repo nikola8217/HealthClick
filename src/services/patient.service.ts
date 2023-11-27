@@ -18,13 +18,13 @@ export class PatientService {
     }
 
     static async findPatientByID(req: Request) {
-        const patient = this.checkPatient(req.params.id);
+        const patient = await this.checkPatient(req.params.id);
 
         return patient;
     }
 
     static async updatePatient(req: Request) {
-        this.checkPatient(req.params.id);
+        await this.checkPatient(req.params.id);
 
         const allowedFields = ['name', 'address', 'dateOfBirth'];
         const patientData: CreateOrUpdatePatient = {};
@@ -41,7 +41,7 @@ export class PatientService {
     }
 
     static async deletePatient(req: Request) {
-        this.checkPatient(req.params.id);
+        await this.checkPatient(req.params.id);
 
         await PatientRepository.deletePatient(req.params.id);
     }

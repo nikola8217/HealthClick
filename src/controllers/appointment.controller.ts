@@ -4,7 +4,7 @@ import { AppointmentService } from "../services/appointment.service";
 export class AppointmentController {
     static async createAppointment(req: Request, res: Response, next: NextFunction) {
         try {
-            const appointment = AppointmentService.createAppointment(req);
+            const appointment = await AppointmentService.createAppointment(req);
 
             res.status(201).json(appointment);
         } catch (error) {
@@ -14,7 +14,7 @@ export class AppointmentController {
 
     static async getSingleAppointment(req: Request, res: Response, next: NextFunction) {
         try {
-            const appointment = AppointmentService.getAppointmentById(req);
+            const appointment = await AppointmentService.getAppointmentById(req);
 
             res.status(200).json(appointment);
         } catch (error) {
@@ -24,7 +24,7 @@ export class AppointmentController {
 
     static async getAppointments(req: Request, res: Response, next: NextFunction) {
         try {
-            const appointments = AppointmentService.getFilteredAppointments(req);
+            const appointments = await AppointmentService.getFilteredAppointments(req);
 
             res.status(200).json(appointments);
         } catch (error) {
@@ -34,7 +34,7 @@ export class AppointmentController {
 
     static async updateAppointment(req: Request, res: Response, next: NextFunction) {
         try {
-            const appointment = AppointmentService.updateAppointment(req);
+            const appointment = await AppointmentService.updateAppointment(req);
 
             res.status(200).json(appointment);
         } catch (error) {
@@ -44,7 +44,7 @@ export class AppointmentController {
 
     static async updateStatus(req: Request, res: Response, next: NextFunction) {
         try {
-            const appointment = AppointmentService.updateStatus(req);
+            const appointment = await AppointmentService.updateStatus(req);
 
             res.status(200).json(appointment);
         } catch (error) {

@@ -23,13 +23,13 @@ export class PricelistService {
     }
 
     static async findPricelistItemByID(req: Request) {
-        const pricelist = this.checkPricelist(req.params.id);
+        const pricelist = await this.checkPricelist(req.params.id);
 
         return pricelist;
     }
 
     static async updatePricelistItem(req: Request) {
-        this.checkPricelist(req.params.id);
+        await this.checkPricelist(req.params.id);
 
         const nameTaken = await PricelistRepository.findOtherByName(req.params.id, req.body.name);
 
@@ -52,7 +52,7 @@ export class PricelistService {
     }
 
     static async deletePricelistItem(req: Request) {
-        this.checkPricelist(req.params.id);
+        await this.checkPricelist(req.params.id);
 
         await PricelistRepository.deletePricelistItem(req.params.id);
     }

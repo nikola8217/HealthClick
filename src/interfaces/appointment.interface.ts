@@ -8,6 +8,5 @@ export interface CreateOrUpdateAppointment {
 export interface FilterParams {
     doctor?: string;
     patient?: string;
-    pricelist?: string;
-    date?: Date;
+    pricelistItem?: string;
 }

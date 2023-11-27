@@ -10,18 +10,18 @@ import { isValidObjectId } from "mongoose";
 
 export class AppointmentService {
     static async createAppointment(req: Request) {
-        this.checkDoctor(req.body.doctor);
+        await this.checkDoctor(req.body.doctor);
 
-        this.checkPatient(req.body.patien);
+        await this.checkPatient(req.body.patient);
 
-        this.checkPricelist(req.body.pricelist);
+        await this.checkPricelist(req.body.pricelistItem);
 
-        this.checkAppointmentTime(req.body.time, req.body.doctor);
+        await this.checkAppointmentTime(req.body.time, req.body.doctor);
 
         const appointmentData: CreateOrUpdateAppointment = {
             doctor: req.body.doctor,
             patient: req.body.patient,
-            pricelistItem: req.body.pricelist,
+            pricelistItem: req.body.pricelistItem,
             time: req.body.time
         };
 
@@ -31,48 +31,39 @@ export class AppointmentService {
     }
 
     static async getAppointmentById(req: Request) {
-        const appointment = this.checkAppointment(req.params.id);
+        const appointment = await this.checkAppointment(req.params.id);
 
         return appointment;
 
     }
 
     static async getFilteredAppointments(req: Request) {
-        
+
         const filterParams: FilterParams = {};
 
-        const setFilter = (param: string, key: keyof FilterParams, transform?: (value: string) => any) => {
-            const value = req.query[param] as string | undefined;
-            if (value) {
-            filterParams[key] = transform ? transform(value) : value;
-            }
-        };
+        if (req.query.doctor) filterParams.doctor = req.query.doctor as string;
 
-        setFilter('doctor', 'doctor');
-        setFilter('patient', 'patient');
-        setFilter('pricelist', 'pricelist');
-        setFilter('date', 'date', (value) => {
-            const fullDate = new Date(value);
-            return new Date(fullDate.toISOString().split('T')[0]);
-        });
+        if (req.query.patient) filterParams.patient = req.query.patient as string;
+
+        if (req.query.pricelistItem) filterParams.pricelistItem = req.query.pricelistItem as string;
 
         const appointments = await AppointmentRepository.getFilteredAppointments(filterParams);
-        
+
         return appointments;
     }
 
     static async updateAppointment(req: Request) {
         const appointment = await this.checkAppointment(req.params.id);
 
-        if (req.body.doctor) this.checkDoctor(req.body.doctor);
+        if (req.body.doctor) await this.checkDoctor(req.body.doctor);
 
-        if (req.body.patien) this.checkPatient(req.body.patien);
+        if (req.body.patient) await this.checkPatient(req.body.patient);
 
-        if (req.body.pricelist) this.checkPricelist(req.body.pricelist);
+        if (req.body.pricelist) await this.checkPricelist(req.body.pricelistItem);
 
-        if (req.body.time) this.checkAppointmentTime(req.body.time, req.body.doctor ? req.body.doctor : appointment.doctor);
+        if (req.body.time) await this.checkAppointmentTime(req.body.time, req.body.doctor ? req.body.doctor : appointment.doctor);
 
-        const allowedFields = ['doctor', 'patient', 'pricelist', 'time'];
+        const allowedFields = ['doctor', 'patient', 'pricelistItem', 'time'];
         const appointmentData: CreateOrUpdateAppointment = {};
 
         for (const field of allowedFields) {
@@ -141,7 +132,7 @@ export class AppointmentService {
             throw new BadRequestError('Pricelist does not exist')
         }
 
-        const pricelistExists = await PricelistRepository.getPricelistById(pricelist);
+        const pricelistExists = await PricelistRepository.getPricelistItemById(pricelist);
 
         if (!pricelistExists) {
             throw new BadRequestError('Pricelist does not exist');
@@ -151,11 +142,11 @@ export class AppointmentService {
     }
 
     private static async checkAppointmentTime(time: Date, doctor: string) {
-        this.checkIsFutureDate(time);
+        await this.checkIsFutureDate(time);
 
-        this.checkIsWorkingHours(time);
+        await this.checkIsWorkingHours(time);
 
-        this.checkIfDoctorHasAppointent(time, doctor)
+        await this.checkIfDoctorHasAppointent(time, doctor)
     }
 
     private static async checkIsFutureDate(time: Date) {
@@ -167,9 +158,12 @@ export class AppointmentService {
     }
 
     private static async checkIsWorkingHours(time: Date) {
-        const isWorkingHours = moment(time).isBetween(moment('08:00', 'HH:mm'), moment('21:00', 'HH:mm'), 'minutes', '[]');
-
-        if (!isWorkingHours) {
+        const startWorkingHours = 8 * 60; 
+        const endWorkingHours = 21 * 60; 
+    
+        const appointmentTime = time.getHours() * 60 + time.getMinutes(); 
+    
+        if (appointmentTime < startWorkingHours || appointmentTime > endWorkingHours) {
             throw new BadRequestError('Doctor works between 08:00 and 21:00. Please choose a valid time.');
         }
     }
