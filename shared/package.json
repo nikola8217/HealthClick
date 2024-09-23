@@ -1,6 +1,6 @@
 {
   "name": "@healthclick/shared",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
@@ -8,9 +8,12 @@
     "build/**/*"
   ],
   "scripts": {
-  "clean": "rimraf ./build",
-  "build": "npm run clean && tsc",
-  "pub": "git add . && git commit -m \"Updates\" && npm version patch && npm run build && npm publish"
+    "clean": "rimraf ./build",
+    "build": "npm run clean && tsc",
+    "pub": "git add . && git commit -m \"Updates\" && npm version patch && npm run build && npm publish"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "keywords": [],
   "author": "",
