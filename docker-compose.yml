@@ -1,0 +1,64 @@
+version: '3'
+services:
+  auth:
+    build:
+      context: ./auth
+      dockerfile: Dockerfile
+    ports:
+      - "${USERS_PORT}:${USERS_PORT}"
+    depends_on:
+      - mongo
+  specializations:
+    build:
+      context: ./specializations
+      dockerfile: Dockerfile
+    ports:
+      - "${SPECIALIZATIONS_PORT}:${SPECIALIZATIONS_PORT}"
+    depends_on:
+      - mongo
+    environment:
+      - DOCTOR_ADDRESS=${DOCTOR_ADDRESS}
+  doctors:
+    build:
+      context: ./doctors
+      dockerfile: Dockerfile
+    ports:
+      - "${DOCTORS_PORT}:${DOCTORS_PORT}"
+    depends_on:
+      - mongo
+      - specializations
+    environment:
+      - SPECIALIZATION_ADDRESS=${SPECIALIZATION_ADDRESS}
+      - APPOINTMENT_ADDRESS=${APPOINTMENT_ADDRESS}
+  patients:
+    build:
+      context: ./patients
+      dockerfile: Dockerfile
+    ports:
+      - "${PATIENTS_PORT}:${PATIENTS_PORT}"
+    depends_on:
+      - mongo
+    environment:
+      - APPOINTMENT_ADDRESS=${APPOINTMENT_ADDRESS}
+  appointments:
+    build:
+      context: ./appointments
+      dockerfile: Dockerfile
+    ports:
+      - "${APPOINTMENTS_PORT}:${APPOINTMENTS_PORT}"
+    depends_on:
+      - mongo
+      - specializations
+      - doctors
+      - patients
+    environment:
+      - DOCTOR_ADDRESS=${DOCTOR_ADDRESS}
+      - PATIENT_ADDRESS=${PATIENT_ADDRESS}
+  mongo:
+    image: mongo
+    ports: 
+      - "${MONGO_PORT}:${MONGO_PORT}"
+    volumes:
+      - mongo-data:/data/db
+volumes:
+  mongo-data:

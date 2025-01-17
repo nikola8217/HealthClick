@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: appointments-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: appointments
+  template:
+    metadata:
+      labels:
+        app: appointments
+    spec:
+      containers:
+        - name: appointments
+          image: zickooo/hospital-manager-appointments:latest
+          imagePullPolicy: Always
+          env:
+            - name: DOCTOR_ADDRESS
+              value: "doctors-service.default:5003"
+            - name: PATIENT_ADDRESS
+              value: "patients-service.default:5004"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: appointments-service
+spec:
+  selector:
+    app: appointments
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 5005
+      targetPort: 5005

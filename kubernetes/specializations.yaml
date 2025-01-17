@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: specializations-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: specializations
+  template:
+    metadata:
+      labels:
+        app: specializations
+    spec:
+      containers:
+        - name: specializations
+          image: zickooo/hospital-manager-specializations:latest
+          imagePullPolicy: Always
+          env:
+            - name: DOCTOR_ADDRESS
+              value: "doctors-service.default:5003"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: specializations-service
+spec:
+  selector:
+    app: specializations
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 5002
+      targetPort: 5002
