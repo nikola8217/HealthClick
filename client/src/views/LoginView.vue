@@ -1,37 +1,35 @@
 <template>
-    <div class="authincation h-100" style="margin-top: 50px">
-        <div class="container h-100">
-            <div class="row justify-content-center h-100 align-items-center">
-                <div class="col-md-6">
-                    <div class="authincation-content">
-                        <div class="row no-gutters">
-                            <div class="col-xl-12">
-                                <div class="auth-form">
-                                    <h2 class="text-center mb-4 text-white">Login in to your account</h2>
-                                    <form @submit.prevent="login">
-                                        <div class="form-group">
-                                            <label class="mb-1 text-white"><strong>Email</strong></label>
-                                            <input type="email" class="form-control" style="color: black" v-model="email">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="mb-1 text-white"><strong>Password</strong></label>
-                                            <input type="password" class="form-control" style="color: black" v-model="password">
-                                        </div>
-                                        <div class="text-center">
-                                            <button type="submit" class="btn bg-white text-primary btn-block">Login</button>
-                                        </div>
-                                    </form>
-                                    <div class="new-account mt-3">
-                                        <p class="text-white">Don't have an account? <router-link class="text-white" to="register">Register here</router-link></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <section>         
+      <div class="container-fluid p-0">
+        <div class="row">
+          <div class="col-12">
+            <div class="login-card">
+              <form class="theme-form login-form" @submit.prevent="login">
+                <h4>Login</h4>
+                <h6>Welcome back! Log in to your account.</h6>
+                <div class="form-group">
+                  <label>Email Address</label>
+                  <div class="input-group"><span class="input-group-text"><i class="icon-email"></i></span>
+                    <input class="form-control" type="email" v-model="email">
+                  </div>
                 </div>
+                <div class="form-group">
+                  <label>Password</label>
+                  <div class="input-group"><span class="input-group-text"><i class="icon-lock"></i></span>
+                    <input class="form-control" type="password" v-model="password">
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <button class="btn btn-primary btn-block" type="submit">Login</button>
+                </div>
+                <p>Don't have account?<router-link class="ms-2" to="register">Create Account</router-link></p>
+              </form>
             </div>
+          </div>
         </div>
-    </div>
+      </div>
+    </section>
 </template>
 
 <script>
@@ -62,7 +60,7 @@ export default {
             }
 
             try {
-                await axios.post(`${AUTH_ADDRESS}/api/users/login`, {
+                const response = await axios.post(`${AUTH_ADDRESS}/api/users/login`, {
                     email: this.email,
                     password: this.password
                 }, {
@@ -70,6 +68,8 @@ export default {
                         'Content-Type': 'application/json' 
                     }
                 });
+
+                localStorage.setItem('token', response.data.token);
 
                 this.$router.push('/appointments');
 
