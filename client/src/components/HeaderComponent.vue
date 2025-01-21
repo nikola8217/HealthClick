@@ -12,7 +12,7 @@
               <li><a class="text-dark" href="#!" onclick="javascript:toggleFullScreen()"><i data-feather="maximize"></i></a></li>
               
               <li class="onhover-dropdown p-0">
-                <button class="btn btn-primary-light" type="button"><a href="../template/login_two.html"><i data-feather="log-out"></i>Log out</a></button>
+                <button class="btn btn-primary-light" type="button" @click="logout">Log out</button>
               </li>
             </ul>
           </div>
@@ -22,7 +22,23 @@
 </template>
 
 <script>
+import axios from 'axios';
+import {AUTH_ADDRESS} from '../conf'
+
 export default {
+  methods: {
+    async logout() {
+      await axios.post(`${AUTH_ADDRESS}/api/users/logout`, {
+          headers: { 
+              'Content-Type': 'application/json' 
+          }
+      });
+
+      localStorage.clear();
+
+      this.$router.push('/');
+    }
+  },
     
 }
 </script>
