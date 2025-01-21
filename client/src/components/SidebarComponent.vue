@@ -10,30 +10,30 @@
               </li>
               
               <li>
-                <router-link class="nav-link menu-title link-nav" to="appointments">
+                <router-link class="nav-link menu-title link-nav" to="/appointments">
                   <i data-feather="file-text"></i>
                   <span>Appoinmtents</span>
                 </router-link>
               </li>
 
               <li>
-                <router-link class="nav-link menu-title link-nav" to="patients">
+                <router-link class="nav-link menu-title link-nav" to="/patients">
                   <i data-feather="file-text"></i>
                   <span>Patients</span>
                 </router-link>
               </li>
 
               <li>
-                <router-link class="nav-link menu-title link-nav" to="doctors">
+                <router-link class="nav-link menu-title link-nav" to="/doctors">
                   <i data-feather="file-text"></i>
                   <span>Doctors</span>
                 </router-link>
               </li>
 
               <li>
-                <router-link class="nav-link menu-title link-nav" to="specializations">
+                <router-link class="nav-link menu-title link-nav" to="/specializations">
                   <i data-feather="file-text"></i>
-                  <span>Specialiations</span>
+                  <span>Specializations</span>
                 </router-link>
               </li>
               
