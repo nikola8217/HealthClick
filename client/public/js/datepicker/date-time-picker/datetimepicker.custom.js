@@ -9,7 +9,7 @@
 //Using Locales
     $(function () {
         $('#dt-local').datetimepicker({
-            locale: 'ru'
+            locale: 'en'
         });
     });
 // Time only

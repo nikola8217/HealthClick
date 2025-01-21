@@ -14,7 +14,7 @@
         defaults = {
             classes: '',
             inline: false,
-            language: 'ru',
+            language: 'en',
             startDate: new Date(),
             firstDay: '',
             weekends: [6, 0],
@@ -222,13 +222,24 @@
 
         _defineLocale: function (lang) {
             if (typeof lang == 'string') {
-                this.loc = $.fn.datepicker.language[lang];
+                this.loc = {
+                    days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                    daysShort: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+                    daysMin: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+                    months: ['January','February','March','April','May','June', 'July','August','September','October','November','December'],
+                    monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    today: 'Today',
+                    clear: 'Clear',
+                    dateFormat: 'yyyy-mm-dd',
+                    timeFormat: 'hh:ii aa',
+                    firstDay: 0
+                };
                 if (!this.loc) {
-                    console.warn('Can\'t find language "' + lang + '" in Datepicker.language, will use "ru" instead');
+                    console.warn('Can\'t find language "' + lang + '" in Datepicker.language, will use "en" instead');
                     this.loc = $.extend(true, {}, $.fn.datepicker.language.ru)
                 }
 
-                this.loc = $.extend(true, {}, $.fn.datepicker.language.ru, $.fn.datepicker.language[lang])
+                this.loc = $.extend(true, {}, $.fn.datepicker.language.ru, this.loc)
             } else {
                 this.loc = $.extend(true, {}, $.fn.datepicker.language.ru, lang)
             }

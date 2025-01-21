@@ -3,6 +3,7 @@ import LoginView from '../views/LoginView.vue';
 import RegisterView from '../views/RegisterView.vue';
 import AppointmentsView from '../views/AppointmentsView.vue';
 import PatientsView from '../views/PatientsView.vue';
+import PatientsFormView from '../views/PatientsFormView.vue';
 import DoctorsView from '../views/DoctorsView.vue';
 import DoctorsFormView from '../views/DoctorsFormView.vue';
 import SpecializationsView from '../views/SpecializationsView.vue';
@@ -28,6 +29,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/patients',
     name: 'patients',
     component: PatientsView
+  },
+  {
+    path: '/patientsForm/:id?',
+    name: 'patientsForm',
+    component: PatientsFormView
   },
   {
     path: '/doctors',
