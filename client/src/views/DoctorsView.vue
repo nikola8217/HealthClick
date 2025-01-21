@@ -11,18 +11,25 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Name</th>
-                                <th>Education</th>
-                                <th>Years of expirience</th>
+                                <th style="width: 200px">Education</th>
                                 <th>Year of employment</th>
                                 <th>Specialization</th>
                                 <th>Actions</th>
                             </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(doctors, index) in this.doctors" :key="index">
-                                    
+                                <tr v-for="(doctor, index) in this.doctors" :key="index">
+                                    <td>{{ doctor.name }}</td>
+                                    <td>{{ doctor.education }}</td>
+                                    <td>{{ doctor.yearOfEmployment }}</td>
+                                    <td>{{ doctor.specialization.name }}</td>
+                                    <td>
+                                        <div class="">
+                                            <router-link :to="{ name: 'doctorsForm', params: { id: doctor._id } }" class="btn btn-primary" style="margin-right: 5px">Edit</router-link>
+                                            <button @click="deleteAlert(doctor._id)" class="btn btn-danger">Delete</button>
+                                        </div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -73,50 +80,50 @@ export default {
             }
         },
 
-        // deleteAlert(id) {
-        //     swal.fire({
-        //         title: "",
-        //         text: "Are you sure you want to delete specialization!",
-        //         icon: "question",
-        //         showCancelButton: true,
-        //         confirmButtonColor: "#398f53",
-        //         cancelButtonColor: "#d33",
-        //         confirmButtonText: "Yes, delete it!"
-        //     }).then((result) => {
-        //         if (result.isConfirmed) {
-        //             this.deleteSpecialization(id);
-        //         }
-        //     });
-        // },
+        deleteAlert(id) {
+            swal.fire({
+                title: "",
+                text: "Are you sure you want to delete doctor!",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#398f53",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.deleteDoctor(id);
+                }
+            });
+        },
 
-        // async deleteSpecialization(id) {
-        //     try {
-        //         await axios.delete(`${SPECIALIZATIONS_ADDRESS}/api/specializations/${id}`, {
-        //             headers: { 
-        //                 'Content-Type': 'application/json',
-        //                 'Authorization': `Bearer ${this.token}` 
-        //             }
-        //         });
+        async deleteDoctor(id) {
+            try {
+                await axios.delete(`${DOCTORS_ADDRESS}/api/doctors/${id}`, {
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${this.token}` 
+                    }
+                });
 
-        //         swal.fire({
-        //             title: "",
-        //             text: "You succesfully deleted specialization!",
-        //             icon: "success",
-        //             confirmButtonText: "OK",
-        //             confirmButtonColor: "#398f53" 
-        //         });
+                swal.fire({
+                    title: "",
+                    text: "You succesfully deleted doctor!",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                    confirmButtonColor: "#398f53" 
+                });
 
-        //         this.getSpecializations();
-        //     } catch (error) {
-        //         swal.fire({
-        //             title: "",
-        //             text: error.response.data.errors[0].message,
-        //             icon: "error",
-        //             confirmButtonText: "OK",
-        //             confirmButtonColor: "#398f53" 
-        //         });
-        //     }
-        // }
+                this.getDoctors();
+            } catch (error) {
+                swal.fire({
+                    title: "",
+                    text: error.response.data.errors[0].message,
+                    icon: "error",
+                    confirmButtonText: "OK",
+                    confirmButtonColor: "#398f53" 
+                });
+            }
+        }
     },
     
 }

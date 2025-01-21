@@ -11,37 +11,38 @@
                             <div class="row mb-3">
                                 <div class="col-md-12">
                                     <label class="form-label">Doctor name</label>
-                                    <input class="form-control" type="text" v-model="name">
+                                    <input class="form-control" type="text" style="text-align: center;" v-model="name">
                                 </div>
                             </div>
 
                             <div class="row mb-3">
                                 <div class="col-md-12">
                                     <label class="form-label">Education</label>
-                                    <input class="form-control" type="text" v-model="eduction">
+                                    <input class="form-control" type="text" style="text-align: center;" v-model="education" >
                                 </div>
                             </div>
 
                             <div class="row mb-3">
                                 <div class="col-md-12">
                                     <label class="form-label">Years of expirience</label>
-                                    <input class="form-control" type="number" v-model="yearsOfExpirience">
+                                    <input class="form-control" type="number" style="text-align: center;" v-model="yearsOfExpirience">
                                 </div>
                             </div>
 
                             <div class="row mb-3">
                                 <div class="col-md-12">
                                     <label class="form-label">Year of employment</label>
-                                    <input class="form-control" type="text" v-model="yearOfEmployment">
+                                    <input class="form-control" type="text" style="text-align: center;" v-model="yearOfEmployment">
                                 </div>
                             </div>
 
                             <div class="row mb-3">
                                 <div class="col-md-12">
                                     <label class="form-label">Specialization</label>
-                                    <select class="form-select">
-                                        <option selected="" disabled="" value="">Choose...</option>
-                                        <option>...</option>
+                                    <select class="form-select" style="text-align: center;" v-model="specializationID">
+                                        <option v-for="specialization in specializations" :value="specialization._id" :key="specialization._id" :selected="specialization._id === specializationID">
+                                            {{ specialization.name }}
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -58,11 +59,13 @@
 <script>
 import axios from 'axios';
 import swal from 'sweetalert2';
-import { DOCTORS_ADDRESS } from '../conf';
+import { DOCTORS_ADDRESS, SPECIALIZATIONS_ADDRESS } from '../conf';
 
 export default {
     mounted() {
-        if (this.doctos) {
+        this.getSpecializations();
+
+        if (this.doctorID) {
             this.getDoctor();
             this.formTitle = 'Edit doctor';
         } else {
@@ -72,18 +75,40 @@ export default {
     data() {
         return {
             name: '',
-            eduction: '',
+            education: '',
             yearsOfExpirience: '',
             yearOfEmployment: '',
-            specialization: '',
+            specializationID: '',
+            specializations: [],
             doctorID: this.$route.params.id ? this.$route.params.id : '',
             formTitle: '' 
         }
     },
 
     methods: {
+        async getSpecializations() {
+            try {
+                const response = await axios.get(`${SPECIALIZATIONS_ADDRESS}/api/specializations`, {
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${this.token}` 
+                    }
+                });
+
+                this.specializations = response.data;
+            } catch (error) {
+                swal.fire({
+                    title: "",
+                    text: error.response.data.errors[0].message,
+                    icon: "error",
+                    confirmButtonText: "OK",
+                    confirmButtonColor: "#398f53" 
+                });
+            }
+        },
+
         async handleSubmit() {
-            if (this.name === "") {
+            if (this.name === "" || this.education === "" || this.yearsOfExpirience === "" || this.yearOfEmployment === "" || this.specializationID === "") {
                 swal.fire({
                     title: "",
                     text: "Please fill in all fields!",
@@ -95,59 +120,67 @@ export default {
                 return false;
             }
 
-            // try {
-            //     if(this.specializationID) {
-            //         await axios.put(`${SPECIALIZATIONS_ADDRESS}/api/specializations/${this.specializationID}`, 
-            //         {
-            //             name: this.name,
-            //         }, 
-            //         {
-            //             headers: { 
-            //                 'Content-Type': 'application/json' ,
-            //                 'Authorization': `Bearer ${localStorage.getItem('token')}`
-            //             }
-            //         });
+            try {
+                if(this.doctorID) {
+                    await axios.put(`${DOCTORS_ADDRESS}/api/doctors/${this.doctorID}`, 
+                    {
+                        name: this.name,
+                        education: this.education,
+                        yearsOfExpirience: this.yearsOfExpirience,
+                        yearOfEmployment: this.yearOfEmployment,
+                        specialization: this.specializationID
+                    }, 
+                    {
+                        headers: { 
+                            'Content-Type': 'application/json' ,
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        }
+                    });
 
-            //         swal.fire({
-            //             title: "",
-            //             text: "You succesfully updated specialization!",
-            //             icon: "success",
-            //             confirmButtonText: "OK",
-            //             confirmButtonColor: "#398f53" 
-            //         });
-            //     } else {
-            //         await axios.post(`${SPECIALIZATIONS_ADDRESS}/api/specializations`, 
-            //         {
-            //             name: this.name,
-            //         }, 
-            //         {
-            //             headers: { 
-            //                 'Content-Type': 'application/json' ,
-            //                 'Authorization': `Bearer ${localStorage.getItem('token')}`
-            //             }
-            //         });
+                    swal.fire({
+                        title: "",
+                        text: "You succesfully updated doctor!",
+                        icon: "success",
+                        confirmButtonText: "OK",
+                        confirmButtonColor: "#398f53" 
+                    });
+                } else {
+                    await axios.post(`${DOCTORS_ADDRESS}/api/doctors`, 
+                    {
+                        name: this.name,
+                        education: this.education,
+                        yearsOfExpirience: this.yearsOfExpirience,
+                        yearOfEmployment: this.yearOfEmployment,
+                        specialization: this.specializationID
+                    }, 
+                    {
+                        headers: { 
+                            'Content-Type': 'application/json' ,
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        }
+                    });
 
-            //         swal.fire({
-            //             title: "",
-            //             text: "You succesfully created specialization!",
-            //             icon: "success",
-            //             confirmButtonText: "OK",
-            //             confirmButtonColor: "#398f53" 
-            //         });
-            //     }
+                    swal.fire({
+                        title: "",
+                        text: "You succesfully created doctor!",
+                        icon: "success",
+                        confirmButtonText: "OK",
+                        confirmButtonColor: "#398f53" 
+                    });
+                }
                 
 
-            //     this.$router.push('/specializations');
+                this.$router.push('/doctors');
                 
-            // } catch (error) {
-            //     swal.fire({
-            //         title: "",
-            //         text: error.response.data.errors[0].message,
-            //         icon: "error",
-            //         confirmButtonText: "OK",
-            //         confirmButtonColor: "#398f53" 
-            //     });
-            // }
+            } catch (error) {
+                swal.fire({
+                    title: "",
+                    text: error.response.data.errors[0].message,
+                    icon: "error",
+                    confirmButtonText: "OK",
+                    confirmButtonColor: "#398f53" 
+                });
+            }
 
             
         },
@@ -162,7 +195,14 @@ export default {
                     }
                 });
 
-                // this.name = response.data.name;
+                console.log(1, response.data);
+
+                this.name = response.data.name;
+                this.education = response.data.education;
+                this.yearsOfExpirience = response.data.yearsOfExpirience;
+                this.yearOfEmployment = response.data.yearOfEmployment;
+                this.specializationID = response.data.specialization._id;
+                
             } catch (error) {
                 swal.fire({
                     title: "",

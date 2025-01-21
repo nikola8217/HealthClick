@@ -10,8 +10,8 @@
                         <form @submit.prevent="handleSubmit">
                             <div class="row mb-3">
                                 <div class="col-md-12">
-                                    <label class="form-label" for="validationCustom01">Specialization name</label>
-                                    <input class="form-control" id="validationCustom01" type="text" v-model="name">
+                                    <label class="form-label">Specialization name</label>
+                                    <input class="form-control" type="text" style="text-align: center;" v-model="name">
                                 </div>
                             </div>
                             
