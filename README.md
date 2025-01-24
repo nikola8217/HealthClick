@@ -2,7 +2,7 @@
 
 ## Description
 
-Full-stack demo application designed to support the operations of clinics, medical offices, and health centers.
+Full-stack demo application designed to support the work of clinics, medical offices, and health centers.
 
 Initially, the application was built as a monolithic API using TypeScript (Node.js). Later, the project evolved to demonstrate proficiency in microservices architecture, Docker, and Kubernetes.
 
